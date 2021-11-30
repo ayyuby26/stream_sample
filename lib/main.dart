@@ -1,9 +1,9 @@
-import 'dart:convert';
-
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:stream_sample/second_page.dart';
+
+import 'utils.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -30,22 +30,27 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  // buat collection/database
-  final users = FirebaseFirestore.instance.collection('users');
-
   addUser() {
     users.add({
       'full_name': "John Doe", // John Doe
       'company': "PT. Maju Mundur", // Stokes and Sons
       'age': 22 // 42
     }).then((value) {
-      print("User Added");
-    }).catchError((error) => print("Failed to add user: $error"));
+      debugPrint("User Added");
+      // ignore: invalid_return_type_for_catch_error
+    }).catchError((error) => debugPrint("Failed to add user: $error"));
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        title: StreamBuilder<DocumentSnapshot>(
+            stream: users.doc('nhNWDAy39qi4G9ViRktu').snapshots(),
+            builder: (context, snapshot) {
+              return Text("${snapshot.data!['age']}");
+            }),
+      ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
           addUser();
@@ -93,7 +98,7 @@ class ItemList extends StatelessWidget {
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => SecondPage(),
+                  builder: (context) => SecondPage(e.id, fv),
                 ),
               );
             },
