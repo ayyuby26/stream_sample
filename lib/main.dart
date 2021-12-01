@@ -2,7 +2,6 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:stream_sample/second_page.dart';
-
 import 'utils.dart';
 
 void main() async {
@@ -46,7 +45,7 @@ class _HomeScreenState extends State<HomeScreen> {
     return Scaffold(
       appBar: AppBar(
         title: StreamBuilder<DocumentSnapshot>(
-            stream: users.doc('nhNWDAy39qi4G9ViRktu').snapshots(),
+            stream: users.doc('AivI29I9sBQdsufvcaPP').snapshots(),
             builder: (context, snapshot) {
               return Text("${snapshot.data!['age']}");
             }),
@@ -68,6 +67,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 },
               ),
             ),
+            Container(color: Colors.black12, height: 20),
             Expanded(
               child: StreamBuilder<QuerySnapshot>(
                   stream: users.snapshots(),
@@ -90,23 +90,45 @@ class ItemList extends StatelessWidget {
   Widget build(BuildContext context) {
     if (snapshot.hasData) {
       final ff = snapshot.data!.docs;
-      return Column(
-        children: ff.map((e) {
-          final fv = UsersModel.json(e);
-          return ListTile(
-            onTap: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => SecondPage(e.id, fv),
-                ),
-              );
-            },
-            title: (Text(fv.fullName)),
-            subtitle: Text("${fv.age}"),
-            trailing: const Icon(Icons.arrow_right_alt),
-          );
-        }).toList(),
+      return SingleChildScrollView(
+        child: Column(
+          children: ff.map((e) {
+            final fv = UsersModel.json(e);
+            return ListTile(
+              onLongPress: () {
+                showDialog(
+                  context: context,
+                  builder: (context) {
+                    return AlertDialog(
+                      content: const Text('Are you sure want to delete?'),
+                      actions: [
+                        TextButton(
+                          style: TextButton.styleFrom(primary: Colors.red),
+                          onPressed: () {
+                            users.doc(e.id).delete();
+                            Navigator.pop(context);
+                          },
+                          child: const Text("Delete"),
+                        )
+                      ],
+                    );
+                  },
+                );
+              },
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => SecondPage(e.id, fv),
+                  ),
+                );
+              },
+              title: (Text(fv.fullName)),
+              subtitle: Text("${fv.age}"),
+              trailing: const Icon(Icons.arrow_right_alt),
+            );
+          }).toList(),
+        ),
       );
     }
 
