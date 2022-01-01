@@ -1,16 +1,9 @@
-# stream_sample
+# Stream Sample
 
-A new Flutter project.
+- rx dart
+- cloud firestore
+- bloc pattern
 
-## Getting Started
+![image](https://user-images.githubusercontent.com/18584572/147854352-344ebab5-504a-4594-a902-7e68da795edf.png)
+![image](https://user-images.githubusercontent.com/18584572/147854368-6d4969bc-27e8-444c-8631-bb1fa83fbd69.png)
 
-This project is a starting point for a Flutter application.
-
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://flutter.dev/docs/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://flutter.dev/docs/cookbook)
-
-For help getting started with Flutter, view our
-[online documentation](https://flutter.dev/docs), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
